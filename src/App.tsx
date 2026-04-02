@@ -165,11 +165,10 @@ const Countdown = ({ onComplete }: { onComplete: () => void }) => {
 };
 
 const MainContent = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const Player = ReactPlayer as any;
 
   useEffect(() => {
-    // Auto-play music when main content loads
-    setIsPlaying(true);
     confetti({
       particleCount: 150,
       spread: 70,
@@ -183,18 +182,16 @@ const MainContent = () => {
       <FloatingHearts />
       
       {/* Music Player (Hidden Video) */}
-      <div className="fixed top-0 left-0 w-0 h-0 overflow-hidden pointer-events-none">
-        {(() => {
-          const Player = ReactPlayer as any;
-          return (
-            <Player
-              url={YOUTUBE_URL}
-              playing={isPlaying}
-              loop
-              volume={0.3}
-            />
-          );
-        })()}
+      <div className="fixed top-0 left-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden">
+        <Player
+          url={YOUTUBE_URL}
+          playing={isPlaying}
+          loop
+          volume={0.3}
+          width="100%"
+          height="100%"
+          controls={false}
+        />
       </div>
 
       {/* Floating Music Toggle */}
@@ -265,32 +262,38 @@ const MainContent = () => {
             <Camera className="text-pink-500" />
             <h2 className="text-4xl font-serif text-pink-800">Our Memories</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
-              { src: 'input_file_0.png', caption: 'Our beautiful moments' },
-              { src: 'input_file_1.png', caption: 'Memories I cherish forever' },
-              { src: 'input_file_2.png', caption: 'The way you look at me' },
-              { src: 'input_file_3.png', caption: 'Every second with you' },
-              { src: 'input_file_4.png', caption: 'Your beautiful smile' },
-              { src: 'input_file_5.png', caption: 'My favorite person' },
-              { src: 'input_file_6.png', caption: 'Forever and always' },
+              { src: 'https://lh3.googleusercontent.com/d/1csV8AFM4vUwhTRMrOTCc3XUTLjKJYPfM', caption: 'The start of our beautiful journey together ✨' },
+              { src: 'https://lh3.googleusercontent.com/d/1szy7wkVUlg_L0MtODUB11GmThuDCrNcd', caption: 'Every memory with you is my favorite memory ❤️' },
+              { src: 'https://lh3.googleusercontent.com/d/1nfZuclOWGCNzRkThGku3fGp0dgNfO86j', caption: 'I could get lost in your eyes forever 💖' },
+              { src: 'https://lh3.googleusercontent.com/d/1_cCAEeP_FTOvMCbFIqNS4TPQVcUE7Mi_', caption: 'Time stops when I\'m with you 🕰️' },
+              { src: 'https://lh3.googleusercontent.com/d/1L8q5sPnpIVqtaDb0uawlAdfS3UP1RMQx', caption: 'Your smile is the most beautiful thing I\'ve ever seen 😍' },
+              { src: 'https://lh3.googleusercontent.com/d/1cHE58aihjcJhi3OM0pHzotm3GT12TOfU', caption: 'My favorite place in the world is right by your side 👫' },
             ].map((img, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                className="group relative overflow-hidden rounded-2xl shadow-lg aspect-[3/4]"
+                transition={{ delay: i * 0.1 }}
+                className="flex flex-col items-center"
               >
-                <img
-                  src={img.src}
-                  alt={img.caption}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-pink-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                  <p className="text-white font-serif italic text-lg">{img.caption}</p>
+                <div className="relative overflow-hidden rounded-2xl shadow-xl aspect-[3/4] mb-4 group w-full">
+                  <img
+                    src={img.src}
+                    alt={img.caption}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl" />
+                </div>
+                <div className="flex items-center gap-2 px-2">
+                  <Heart size={16} className="text-pink-400 shrink-0" fill="currentColor" />
+                  <p className="text-pink-800 font-serif italic text-center text-lg md:text-xl leading-relaxed">
+                    {img.caption}
+                  </p>
+                  <Heart size={16} className="text-pink-400 shrink-0" fill="currentColor" />
                 </div>
               </motion.div>
             ))}
