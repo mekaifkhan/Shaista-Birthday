@@ -11,7 +11,7 @@ import { Heart, Music, Pause, Play, Volume2, Calendar, Camera, Video, MessageCir
 
 // --- Constants ---
 const TARGET_DATE = new Date('2026-04-03T00:56:00').getTime();
-const MUSIC_URL = 'https://lh3.googleusercontent.com/d/1Ybc8ECSOPICUPTn21MDnkXjyoXH5Pj9E';
+const MUSIC_URL = 'https://drive.google.com/uc?id=1UgrRGiWjSa1yYc75Yo42UrBRtM4Yr62K&export=download';
 const HERO_IMAGE = 'https://lh3.googleusercontent.com/d/1csV8AFM4vUwhTRMrOTCc3XUTLjKJYPfM';
 
 // --- Components ---
@@ -211,10 +211,22 @@ const Countdown = ({ onComplete }: { onComplete: () => void }) => {
 };
 
 const MainContent = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStartedMusic, setHasStartedMusic] = useState(false);
   const [showLoveModal, setShowLoveModal] = useState(false);
   const [showScrollPrompt, setShowScrollPrompt] = useState(true);
   const Player = ReactPlayer as any;
+
+  const startMusic = () => {
+    setIsPlaying(true);
+    setHasStartedMusic(true);
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.3 },
+      colors: ['#ffb6c1', '#ff69b4', '#ffffff']
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -241,23 +253,74 @@ const MainContent = () => {
     <div className="min-h-screen bg-[#fff5f5] font-sans relative">
       <FloatingHearts />
       
-      {/* Music Player (Hidden) */}
-      <div className="fixed top-0 left-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden">
+      {/* Music Player (Hidden/Small) */}
+      <div className="fixed bottom-4 left-4 z-[60] w-12 h-12 rounded-full overflow-hidden shadow-lg border-2 border-pink-300 bg-white group">
         <Player
           url={MUSIC_URL}
           playing={isPlaying}
           loop
-          volume={0.5}
+          volume={0.8}
           width="100%"
           height="100%"
           controls={false}
           config={{
             file: {
-              forceAudio: true
+              attributes: {
+                style: { width: '100%', height: '100%', objectFit: 'cover' }
+              }
             }
           }}
         />
+        <div className="absolute inset-0 flex items-center justify-center bg-pink-500/20 group-hover:bg-transparent transition-colors">
+          <Music size={16} className="text-pink-600 animate-pulse" />
+        </div>
       </div>
+
+      {/* Start Music Overlay Button */}
+      <AnimatePresence>
+        {!hasStartedMusic && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-pink-50/95 backdrop-blur-xl"
+          >
+            <motion.div className="flex flex-col items-center gap-8 p-10 bg-white rounded-[3rem] shadow-[0_32px_64px_-15px_rgba(255,182,193,0.5)] border-2 border-pink-100">
+              <div className="relative">
+                <motion.div 
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute inset-0 bg-pink-200 rounded-full blur-2xl"
+                />
+                <button
+                  onClick={startMusic}
+                  className="relative bg-gradient-to-br from-pink-400 to-pink-600 text-white p-10 rounded-full shadow-2xl hover:scale-110 transition-transform active:scale-95 group"
+                >
+                  <Play size={56} fill="currentColor" className="ml-2" />
+                  <div className="absolute -top-2 -right-2 bg-white text-pink-500 p-2 rounded-full shadow-md">
+                    <Music size={20} />
+                  </div>
+                </button>
+              </div>
+              <div className="text-center space-y-3">
+                <h2 className="text-3xl font-serif text-pink-700 font-bold">Click to start the music ❤️</h2>
+                <p className="text-pink-400 italic text-lg">Please click here before scrolling to hear your surprise</p>
+              </div>
+              <div className="flex gap-2">
+                {[1, 2, 3].map((i) => (
+                  <motion.div
+                    key={i}
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 1, delay: i * 0.2, repeat: Infinity }}
+                  >
+                    <Heart size={20} className="text-pink-300" fill="currentColor" />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Music Toggle */}
       <button
