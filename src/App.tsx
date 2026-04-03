@@ -400,22 +400,13 @@ const MainContent = () => {
           <h2 className="text-4xl font-serif text-pink-800">Our Moments in Motion</h2>
         </div>
         <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl glass p-2">
-          <div className="w-full h-full rounded-2xl overflow-hidden bg-pink-100 relative">
-            <Player
-              url="https://drive.google.com/uc?id=1Hxd9KSezIg-6KRZEBJVcM8puK-3dMsJP&export=download"
-              width="100%"
-              height="100%"
-              controls={true}
-              playing={false}
-              config={{
-                file: {
-                  attributes: {
-                    controlsList: 'nodownload',
-                    style: { width: '100%', height: '100%', objectFit: 'cover' }
-                  }
-                }
-              }}
-            />
+          <div className="w-full h-full rounded-2xl overflow-hidden bg-black relative">
+            <iframe
+              src="https://drive.google.com/file/d/1Hxd9KSezIg-6KRZEBJVcM8puK-3dMsJP/preview"
+              className="w-full h-full border-none"
+              allow="autoplay; fullscreen"
+              title="Kajra RE date in purani dilli"
+            ></iframe>
           </div>
         </div>
         <p className="text-center mt-6 text-pink-700 font-serif italic text-xl">
