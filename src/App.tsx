@@ -350,6 +350,14 @@ const MainContent = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
+              { src: 'https://lh3.googleusercontent.com/d/1fh2fXKDWIOW0adJn6AKPWkdJFMz0U1RL', caption: 'The very first moment our worlds collided. 15th March - a date etched in my heart forever. ✨❤️' },
+              { src: 'https://lh3.googleusercontent.com/d/1bmNxrKak4QJTQymu2DlgAu-HSvRETzqD', caption: 'That first hug where I felt home for the very first time. Pure magic in your arms. 🤗💖' },
+              { src: 'https://lh3.googleusercontent.com/d/1kwJRG96R1b95EIN0al6AmEdmHoCj0NnV', caption: 'Even a simple metro drop-off feels like a scene from a movie when it\'s with you. 🚇✨' },
+              { src: 'https://lh3.googleusercontent.com/d/1uQEKXKWBqdz2repXnSuOqxSboolfjx_c', caption: 'Miles of tracks, but my heart only stayed with you. Our most unforgettable journey. 🚂💕' },
+              { src: 'https://lh3.googleusercontent.com/d/1Hu32Npzgu9WRFHCI_RCXYKg8cy27aAxl', caption: 'Sharing simple meals and endless laughs. Our KFC dates are my favorite dates. 🍗😍' },
+              { src: 'https://lh3.googleusercontent.com/d/1ekUrCw9Kds5hgxYb5chrXN5FP6NCXeVU', caption: '28th May - The day we reached our beautiful destination. A new chapter of us. 📍❤️' },
+              { src: 'https://lh3.googleusercontent.com/d/1E-rO6-UbYn2eTmRk2nb_Aab96eTuCI7d', caption: 'Dressed up and glowing, but all I could see was you. Our special foundation day. 🎊✨' },
+              { src: 'https://lh3.googleusercontent.com/d/1FuLhoyrrajneXdJy-_HGJghj-pDeCbBs', caption: 'Spices of Old Delhi and the sweetness of your company. The perfect dinner. 🍛🤤' },
               { src: 'https://lh3.googleusercontent.com/d/1nfZuclOWGCNzRkThGku3fGp0dgNfO86j', caption: 'I could get lost in your eyes forever 💖' },
               { src: 'https://lh3.googleusercontent.com/d/1_cCAEeP_FTOvMCbFIqNS4TPQVcUE7Mi_', caption: 'Time stops when I\'m with you 🕰️' },
               { src: 'https://lh3.googleusercontent.com/d/1L8q5sPnpIVqtaDb0uawlAdfS3UP1RMQx', caption: 'Your smile is the most beautiful thing I\'ve ever seen 😍' },
@@ -392,15 +400,27 @@ const MainContent = () => {
           <h2 className="text-4xl font-serif text-pink-800">Our Moments in Motion</h2>
         </div>
         <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl glass p-2">
-          <div className="w-full h-full rounded-2xl overflow-hidden bg-pink-100 flex items-center justify-center">
-            {/* Placeholder for actual video if available, otherwise a romantic placeholder */}
-            <div className="text-center p-8">
-              <Heart className="mx-auto mb-4 text-pink-400 animate-pulse" size={64} />
-              <p className="text-pink-600 font-serif italic text-xl">Our story continues here...</p>
-              <p className="text-pink-400 text-sm mt-2">(Replace with your actual video link)</p>
-            </div>
+          <div className="w-full h-full rounded-2xl overflow-hidden bg-pink-100 relative">
+            <Player
+              url="https://drive.google.com/uc?id=1Hxd9KSezIg-6KRZEBJVcM8puK-3dMsJP&export=download"
+              width="100%"
+              height="100%"
+              controls={true}
+              playing={false}
+              config={{
+                file: {
+                  attributes: {
+                    controlsList: 'nodownload',
+                    style: { width: '100%', height: '100%', objectFit: 'cover' }
+                  }
+                }
+              }}
+            />
           </div>
         </div>
+        <p className="text-center mt-6 text-pink-700 font-serif italic text-xl">
+          Kajra RE date in purani dilli ❤️✨
+        </p>
       </section>
 
       {/* Section 4: Reasons I Love You */}
