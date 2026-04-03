@@ -400,7 +400,7 @@ const MainContent = () => {
             "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."
           </p>
           <div className="inline-block glass px-8 py-4 rounded-full text-pink-600 font-bold tracking-widest uppercase">
-            April 3rd, 2026
+            April 4th, 2026
           </div>
         </motion.div>
       </section>
