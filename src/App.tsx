@@ -10,7 +10,7 @@ import ReactPlayer from 'react-player';
 import { Heart, Music, Pause, Play, Volume2, Calendar, Camera, Video, MessageCircleHeart, Sparkles, ChevronDown, X } from 'lucide-react';
 
 // --- Constants ---
-const TARGET_DATE = new Date('2026-04-03T00:56:00').getTime();
+const TARGET_DATE = new Date('2026-04-04T00:00:00').getTime();
 const MUSIC_URL = 'https://drive.google.com/uc?id=1UgrRGiWjSa1yYc75Yo42UrBRtM4Yr62K&export=download';
 const HERO_IMAGE = 'https://lh3.googleusercontent.com/d/1csV8AFM4vUwhTRMrOTCc3XUTLjKJYPfM';
 
@@ -98,134 +98,59 @@ const FloatingHearts = () => {
 };
 
 const Countdown = ({ onComplete }: { onComplete: () => void }) => {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-  const [isReady, setIsReady] = useState(false);
-
-  const calculateTimeLeft = useCallback(() => {
-    const now = new Date().getTime();
-    const difference = TARGET_DATE - now;
-
-    if (difference <= 0) {
-      setIsReady(true);
-      return null;
-    }
-
-    return {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-    };
-  }, []);
-
-  useEffect(() => {
-    // Initial check
-    const initialTime = calculateTimeLeft();
-    if (initialTime) {
-      setTimeLeft(initialTime);
-    }
-
-    const timer = setInterval(() => {
-      const newTime = calculateTimeLeft();
-      if (newTime) {
-        setTimeLeft(newTime);
-      }
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [calculateTimeLeft]);
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-pink-900/20 via-black to-black z-0" />
       <FloatingHearts />
       
       <AnimatePresence mode="wait">
-        {isReady ? (
+        <motion.div
+          key="ready"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.1 }}
+          className="z-10 text-center px-4"
+        >
           <motion.div
-            key="ready"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1 }}
-            className="z-10 text-center px-4"
+            animate={{ 
+              scale: [1, 1.05, 1],
+              filter: ["drop-shadow(0 0 0px #db2777)", "drop-shadow(0 0 20px #db2777)", "drop-shadow(0 0 0px #db2777)"]
+            }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="mb-12"
           >
-            <motion.div
-              animate={{ 
-                scale: [1, 1.05, 1],
-                filter: ["drop-shadow(0 0 0px #db2777)", "drop-shadow(0 0 20px #db2777)", "drop-shadow(0 0 0px #db2777)"]
-              }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="mb-12"
-            >
-              <Heart size={80} className="text-pink-500 mx-auto mb-6" fill="currentColor" />
-              <h2 className="text-4xl md:text-6xl font-cursive text-pink-200 text-glow">
-                Your Surprise is Ready!
-              </h2>
-            </motion.div>
-            
-            <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(219,39,119,0.6)" }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onComplete}
-              className="bg-pink-600 text-white px-12 py-5 rounded-full text-2xl font-bold shadow-xl transition-all"
-            >
-              Open Your Gift ❤️
-            </motion.button>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="countdown"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="z-10 text-center px-4"
-          >
-            <h2 className="text-2xl md:text-3xl font-serif italic mb-8 text-pink-200">
-              Something special is coming for you ❤️
+            <Heart size={80} className="text-pink-500 mx-auto mb-6" fill="currentColor" />
+            <h2 className="text-4xl md:text-6xl font-cursive text-pink-200 text-glow">
+              Your Surprise is Ready!
             </h2>
-            
-            <div className="flex gap-4 md:gap-8 justify-center">
-              {[
-                { label: 'Days', value: timeLeft.days },
-                { label: 'Hours', value: timeLeft.hours },
-                { label: 'Minutes', value: timeLeft.minutes },
-                { label: 'Seconds', value: timeLeft.seconds },
-              ].map((item) => (
-                <div key={item.label} className="flex flex-col items-center">
-                  <div className="w-16 h-16 md:w-24 md:h-24 glass rounded-2xl flex items-center justify-center text-3xl md:text-5xl font-bold text-pink-300 mb-2">
-                    {String(item.value).padStart(2, '0')}
-                  </div>
-                  <span className="text-xs md:text-sm uppercase tracking-widest text-pink-400/60">{item.label}</span>
-                </div>
-              ))}
-            </div>
+            <p className="mt-4 text-xl md:text-2xl font-serif italic text-pink-300/80">
+              4th April 2026 ❤️
+            </p>
           </motion.div>
-        )}
+          
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(219,39,119,0.6)" }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onComplete}
+            className="bg-pink-600 text-white px-12 py-5 rounded-full text-2xl font-bold shadow-xl transition-all"
+          >
+            Open Your Gift ❤️
+          </motion.button>
+        </motion.div>
       </AnimatePresence>
     </div>
   );
 };
 
 const MainContent = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasStartedMusic, setHasStartedMusic] = useState(false);
   const [showLoveModal, setShowLoveModal] = useState(false);
   const [showScrollPrompt, setShowScrollPrompt] = useState(true);
   const Player = ReactPlayer as any;
 
-  const startMusic = () => {
-    setIsPlaying(true);
-    setHasStartedMusic(true);
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.3 },
-      colors: ['#ffb6c1', '#ff69b4', '#ffffff']
-    });
+  const handleCloseAndRedirect = () => {
+    setShowLoveModal(false);
+    const message = encodeURIComponent("I'm already yours betuuu! ❤️ I love you so much! ✨");
+    window.open(`https://wa.me/9128914453?text=${message}`, '_blank');
   };
 
   useEffect(() => {
@@ -253,82 +178,36 @@ const MainContent = () => {
     <div className="min-h-screen bg-[#fff5f5] font-sans relative">
       <FloatingHearts />
       
-      {/* Music Player (Hidden/Small) */}
-      <div className="fixed bottom-4 left-4 z-[60] w-12 h-12 rounded-full overflow-hidden shadow-lg border-2 border-pink-300 bg-white group">
-        <Player
-          url={MUSIC_URL}
-          playing={isPlaying}
-          loop
-          volume={0.8}
-          width="100%"
-          height="100%"
-          controls={false}
-          config={{
-            file: {
-              attributes: {
-                style: { width: '100%', height: '100%', objectFit: 'cover' }
-              }
-            }
-          }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center bg-pink-500/20 group-hover:bg-transparent transition-colors">
-          <Music size={16} className="text-pink-600 animate-pulse" />
-        </div>
-      </div>
-
-      {/* Start Music Overlay Button */}
-      <AnimatePresence>
-        {!hasStartedMusic && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-pink-50/95 backdrop-blur-xl"
-          >
-            <motion.div className="flex flex-col items-center gap-8 p-10 bg-white rounded-[3rem] shadow-[0_32px_64px_-15px_rgba(255,182,193,0.5)] border-2 border-pink-100">
-              <div className="relative">
-                <motion.div 
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute inset-0 bg-pink-200 rounded-full blur-2xl"
-                />
-                <button
-                  onClick={startMusic}
-                  className="relative bg-gradient-to-br from-pink-400 to-pink-600 text-white p-10 rounded-full shadow-2xl hover:scale-110 transition-transform active:scale-95 group"
-                >
-                  <Play size={56} fill="currentColor" className="ml-2" />
-                  <div className="absolute -top-2 -right-2 bg-white text-pink-500 p-2 rounded-full shadow-md">
-                    <Music size={20} />
-                  </div>
-                </button>
-              </div>
-              <div className="text-center space-y-3">
-                <h2 className="text-3xl font-serif text-pink-700 font-bold">Click to start the music ❤️</h2>
-                <p className="text-pink-400 italic text-lg">Please click here before scrolling to hear your surprise</p>
-              </div>
-              <div className="flex gap-2">
-                {[1, 2, 3].map((i) => (
-                  <motion.div
-                    key={i}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 1, delay: i * 0.2, repeat: Infinity }}
-                  >
-                    <Heart size={20} className="text-pink-300" fill="currentColor" />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Floating Music Toggle */}
-      <button
-        onClick={() => setIsPlaying(!isPlaying)}
-        className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-pink-500 text-white shadow-lg hover:scale-110 transition-transform active:scale-95"
-      >
-        {isPlaying ? <Pause size={24} /> : <Play size={24} />}
-      </button>
+      {/* Section 0: Start Our Journey (Video) */}
+      <section className="pt-12 pb-12 px-4 max-w-3xl mx-auto text-center relative z-30">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass p-4 md:p-6 rounded-[2.5rem] shadow-2xl border-2 border-pink-100 bg-white/80 backdrop-blur-md"
+        >
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="bg-pink-500 p-2 rounded-full text-white shadow-lg">
+              <Video size={20} />
+            </div>
+            <h2 className="text-xl md:text-2xl font-serif text-pink-700 font-bold">click here before scrolling down Shaistuuuuu ❤️</h2>
+          </div>
+          
+          <div className="aspect-video rounded-2xl overflow-hidden bg-black shadow-inner relative border-4 border-pink-50">
+            <iframe
+              src="https://drive.google.com/file/d/1UgrRGiWjSa1yYc75Yo42UrBRtM4Yr62K/preview"
+              className="w-full h-full border-none"
+              allow="autoplay; fullscreen"
+              title="Our Journey Starts Here"
+            ></iframe>
+          </div>
+          
+          <div className="mt-4 flex items-center justify-center gap-2 text-pink-400 italic text-sm md:text-base">
+            <Sparkles size={16} />
+            <p>Press play to begin our story...</p>
+            <Sparkles size={16} />
+          </div>
+        </motion.div>
+      </section>
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
@@ -574,7 +453,7 @@ const MainContent = () => {
                 className="relative glass p-8 md:p-12 rounded-3xl border-2 border-pink-300 shadow-2xl max-w-lg w-full text-center"
               >
                 <button 
-                  onClick={() => setShowLoveModal(false)}
+                  onClick={handleCloseAndRedirect}
                   className="absolute top-4 right-4 text-pink-500 hover:text-pink-700 transition-colors"
                 >
                   <X size={24} />
@@ -589,7 +468,7 @@ const MainContent = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowLoveModal(false)}
+                  onClick={handleCloseAndRedirect}
                   className="mt-8 bg-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-lg"
                 >
                   Close ❤️
